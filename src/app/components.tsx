@@ -50,7 +50,7 @@ export function Navbar() {
               letterSpacing: "-0.02em",
             }}
           >
-            Serenity AI
+            Psyche AI
           </span>
         </a>
 
@@ -171,7 +171,7 @@ export function Footer() {
             </span>
           </div>
           <span style={{ fontSize: 18, fontWeight: 800, color: "var(--primary)" }}>
-            Serenity AI
+            Psyche AI
           </span>
         </div>
         <div style={{ display: "flex", gap: 32, fontSize: 14, color: "var(--text-secondary)" }}>
@@ -180,7 +180,7 @@ export function Footer() {
           <a href="#" style={{ textDecoration: "none", color: "inherit" }}>Contact Support</a>
         </div>
         <p style={{ fontSize: 12, color: "#94a3b8" }}>
-          © 2025 Serenity AI. All rights reserved. If you are in crisis, call{" "}
+          © 2025 Psyche AI. All rights reserved. If you are in crisis, call{" "}
           <a href="tel:988" style={{ color: "var(--emergency-red)", fontWeight: 700 }}>988</a>{" "}
           (Suicide &amp; Crisis Lifeline).
         </p>

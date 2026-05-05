@@ -3,7 +3,7 @@ import "./globals.css";
 import { Navbar, Footer } from "./components";
 
 export const metadata: Metadata = {
-  title: "Serenity AI — Human-Centered AI Therapy",
+  title: "Psyche AI — Human-Centered AI Therapy",
   description:
     "Your personal AI-driven mental health care assistant hub. 24/7 access to empathetic AI therapists, daily mood tracking, doctor connect, and peer community forums.",
   keywords: ["mental health", "AI therapy", "chatbot", "mood tracker", "psychiatrist", "wellness"],

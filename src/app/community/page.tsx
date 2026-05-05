@@ -64,7 +64,7 @@ const SAMPLE_POSTS: Post[] = [
     date: "1 day ago",
     upvotes: 18,
     comments: [
-      { id: "c4", author: "InkAndThoughts", content: "Yes! Start super simple — even just writing 3 words about your day. Don't pressure yourself to write paragraphs. The Serenity AI daily log feature has great prompts to get started.", date: "22 hours ago" },
+      { id: "c4", author: "InkAndThoughts", content: "Yes! Start super simple — even just writing 3 words about your day. Don't pressure yourself to write paragraphs. The Psyche AI daily log feature has great prompts to get started.", date: "22 hours ago" },
     ],
     userUpvoted: false,
   },
