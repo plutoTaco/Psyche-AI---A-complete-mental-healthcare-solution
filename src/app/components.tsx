@@ -1,6 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
+
 export function Navbar() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    // Get the current user on mount
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    window.location.href = "/";
+  };
+
   return (
     <header
       style={{
@@ -81,7 +112,7 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Emergency + Profile */}
+        {/* Emergency + Auth */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <a
             href="/emergency"
@@ -109,24 +140,104 @@ export function Navbar() {
             </span>
             EMERGENCY 24/7
           </a>
-          <a
-            href="/profile"
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, var(--primary), var(--primary-light))",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
-              person
-            </span>
-          </a>
+
+          {/* Auth Area */}
+          {loading ? (
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: "var(--border-color)",
+              }}
+            />
+          ) : user ? (
+            /* Logged In: Avatar + Dropdown */
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <a
+                href="/profile"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, var(--primary), var(--primary-light))",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  textDecoration: "none",
+                  fontSize: 16,
+                  fontWeight: 700,
+                }}
+                title={user.email || "Profile"}
+              >
+                {user.email ? user.email[0].toUpperCase() : (
+                  <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
+                    person
+                  </span>
+                )}
+              </a>
+              <button
+                onClick={handleLogout}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "8px 16px",
+                  borderRadius: "var(--radius-full)",
+                  border: "1.5px solid var(--border-color)",
+                  background: "transparent",
+                  color: "var(--text-secondary)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  fontFamily: "inherit",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--emergency-red)";
+                  e.currentTarget.style.color = "var(--emergency-red)";
+                  e.currentTarget.style.background = "rgba(220,38,38,0.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border-color)";
+                  e.currentTarget.style.color = "var(--text-secondary)";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
+                  logout
+                </span>
+                Logout
+              </button>
+            </div>
+          ) : (
+            /* Logged Out: Login Button */
+            <a
+              href="/login"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "10px 24px",
+                borderRadius: "var(--radius-full)",
+                background: "var(--primary)",
+                color: "#fff",
+                fontSize: 13,
+                fontWeight: 700,
+                textDecoration: "none",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                boxShadow: "0 4px 16px var(--shadow-primary)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
+                login
+              </span>
+              Login
+            </a>
+          )}
         </div>
       </div>
     </header>
